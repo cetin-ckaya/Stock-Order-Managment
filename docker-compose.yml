@@ -1,0 +1,43 @@
+# Docker Compose Version - Docker Compose formatının 3.8 versiyonunu kullanıyoruz
+version: '3.8'
+
+services:
+  # PostgreSQL Veritabanı Servisi
+  postgres:
+    image: postgres:15-alpine  # Alpine: Hafif Linux dağıtımı, daha az yer kaplar
+    container_name: stock_order_db  # Container'a özel isim veriyoruz
+    environment:
+      # Veritabanı yapılandırması
+      POSTGRES_DB: stock_order_db      # Oluşturulacak veritabanı adı
+      POSTGRES_USER: admin              # Veritabanı kullanıcı adı
+      POSTGRES_PASSWORD: admin123       # Veritabanı şifresi
+    ports:
+      - "5433:5432"  # Host:Container port mapping - localhost:5432'den erişebiliriz
+    volumes:
+      # Veritabanı verilerini kalıcı hale getiriyoruz (container silinse bile veriler kalır)
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - stock-network  # Özel network oluşturarak servisler arası iletişim sağlıyoruz
+
+  # pgAdmin - PostgreSQL için web tabanlı yönetim arayüzü
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com      # pgAdmin giriş email
+      PGADMIN_DEFAULT_PASSWORD: admin123          # pgAdmin giriş şifresi
+    ports:
+      - "5050:80"  # http://localhost:5050 adresinden erişilebilir
+    networks:
+      - stock-network
+    depends_on:
+      - postgres  # PostgreSQL başlamadan pgAdmin başlamaz
+
+# Volumes tanımı - Verilerin kalıcılığı için
+volumes:
+  postgres_data:
+
+# Network tanımı - Container'lar arası iletişim için
+networks:
+  stock-network:
+    driver: bridge  # Bridge network: Container'lar birbirleriyle konuşabilir
