@@ -67,7 +67,7 @@ public class OrderServiceImpl implements OrderService {
             Integer quantity = entry.getValue();
 
             // 1. Ürün var mı?
-            Product product = productRepository.findById(productId)
+            Product product = productRepository.findByIdWithLock(productId)
                     .orElseThrow(() -> new ProductNotFoundException(productId));
 
             // 2. Ürün aktif mi?
