@@ -76,30 +76,34 @@ cd Stock-Order-Managment
 
 Çalıştırma
 1. Veritabanını Docker ile Başlatın
-Bash
+```bash
 
 docker-compose up -d
 Bu komut ile aşağıdaki servisler ayağa kalkar:
+```
 
 Servis	Port	Açıklama
 PostgreSQL	5433	Ana veritabanı
 pgAdmin	5050	Veritabanı yönetim arayüzü
 Container'ların çalıştığını doğrulayın:
 
-Bash
+```bash
 
 docker ps
+```
 2. Uygulamayı Başlatın
 Maven Wrapper ile:
 
-Bash
+```bash
 
 ./mvnw spring-boot:run
+```
 Windows için:
 
-Bash
+```bash
 
 mvnw.cmd spring-boot:run
+```
 IDE üzerinden:
 
 StockOrderManagmentApplication.java dosyasını çalıştırın.
@@ -109,16 +113,18 @@ Uygulama başarıyla başladığında http://localhost:8085 adresinden erişileb
 API Dokümantasyonu
 Uygulama çalıştıktan sonra Swagger UI üzerinden tüm endpoint'leri interaktif olarak test edebilirsiniz:
 
-text
+```text
 
 http://localhost:8085/swagger-ui.html
+```
 OpenAPI JSON çıktısı için:
 
-text
+```text
 
 http://localhost:8085/api-docs
+```
 Proje Yapısı
-text
+```text
 
 src/main/java/com/hibernate/stockordermanagment/
 ├── config/            # Swagger, uygulama yapılandırmaları
@@ -139,9 +145,10 @@ src/main/resources/
 └── application.properties
 
 src/test/java/         # Unit ve entegrasyon testleri
+```
 Endpoint Listesi
 Ürün Yönetimi
-Method	Endpoint	Açıklama
+
 POST	/api/v1/products	Yeni ürün oluşturur
 GET	/api/v1/products	Ürünleri filtreli ve sayfalı listeler
 GET	/api/v1/products/{id}	ID ile ürün getirir
@@ -150,13 +157,13 @@ DELETE	/api/v1/products/{id}	Ürünü pasif duruma getirir
 GET	/api/v1/products/low-stock	Düşük stoklu ürünleri listeler
 GET	/api/v1/products/top-expensive	En pahalı 5 ürünü listeler
 Sipariş Yönetimi
-Method	Endpoint	Açıklama
+
 POST	/api/v1/orders	Yeni sipariş oluşturur
 GET	/api/v1/orders	Tüm siparişleri listeler
 GET	/api/v1/orders/{id}	ID ile sipariş getirir
 PUT	/api/v1/orders/{id}/cancel	Siparişi iptal eder
 Raporlama
-Method	Endpoint	Açıklama
+
 GET	/api/v1/reports/top-selling-products?limit=5	En çok satan ürünler
 GET	/api/v1/reports/order-summary	Genel sipariş özeti
 Örnek İstekler
@@ -188,14 +195,16 @@ POST /api/v1/orders
 Testleri Çalıştırma
 Tüm testleri çalıştırmak için (Docker container'ının açık olması gerekir):
 
-Bash
+```bash
 
 ./mvnw test
+```
 Belirli bir test sınıfını çalıştırmak için:
 
-Bash
+```bash
 
 ./mvnw test -Dtest=OrderServiceTest
+```
 Proje aşağıdaki test türlerini içerir:
 
 Unit Testler (Mockito ile) — ProductServiceTest, OrderServiceTest
@@ -204,12 +213,13 @@ Concurrency Testi — OrderConcurrencyTest
 Ortam Değişkenleri
 Veritabanı bağlantı bilgileri src/main/resources/application.properties dosyasında tanımlıdır:
 
-properties
+```properties
 
 spring.datasource.url=jdbc:postgresql://localhost:5433/stock_order_db
 spring.datasource.username=admin
 spring.datasource.password=admin123
 server.port=8085
+```
 Farklı bir ortamda çalıştırmak için bu değerleri kendi ortamınıza göre güncelleyebilir veya application-{profile}.properties dosyaları ile profil bazlı yapılandırma yapabilirsiniz.
 
 Mimari Kararlar
@@ -218,18 +228,21 @@ Bu proje ile ilgili teknik tercihlerin (neden PostgreSQL, neden Pessimistic Lock
 Katkıda Bulunma
 Bu repository'yi fork edin
 Yeni bir branch oluşturun
-Bash
+```bash
 
 git checkout -b feature/yeni-ozellik
+```
 Değişikliklerinizi commit edin
-Bash
+```bash
 
 git commit -m "özellik: yeni özellik eklendi"
 Branch'inizi push edin
-Bash
+```
+```bash
 
 git push origin feature/yeni-ozellik
 Bir Pull Request açın
+```
 Lisans
 Bu proje MIT lisansı ile lisanslanmıştır.
 
