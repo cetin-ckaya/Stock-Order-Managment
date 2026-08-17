@@ -69,24 +69,39 @@ Projeyi çalıştırmadan önce aşağıdakilerin kurulu olduğundan emin olun:
 
 Projeyi bilgisayarınıza klonlayın:
 
+```bash
 git clone https://github.com/cetin-ckaya/Stock-Order-Managment.git
 cd Stock-Order-Managment
+```
 
 Çalıştırma
 1. Veritabanını Docker ile Başlatın
+Bash
+
 docker-compose up -d
+Bu komut ile aşağıdaki servisler ayağa kalkar:
 
+Servis	Port	Açıklama
+PostgreSQL	5433	Ana veritabanı
+pgAdmin	5050	Veritabanı yönetim arayüzü
 Container'ların çalıştığını doğrulayın:
+
+Bash
+
 docker ps
-
 2. Uygulamayı Başlatın
-   Maven Wrapper ile:
+Maven Wrapper ile:
+
+Bash
+
 ./mvnw spring-boot:run
-
 Windows için:
-mvnw.cmd spring-boot:run
 
+Bash
+
+mvnw.cmd spring-boot:run
 IDE üzerinden:
+
 StockOrderManagmentApplication.java dosyasını çalıştırın.
 
 Uygulama başarıyla başladığında http://localhost:8085 adresinden erişilebilir olacaktır. Flyway migration'ları otomatik olarak çalışır ve veritabanı şeması oluşturulur.
@@ -94,13 +109,16 @@ Uygulama başarıyla başladığında http://localhost:8085 adresinden erişileb
 API Dokümantasyonu
 Uygulama çalıştıktan sonra Swagger UI üzerinden tüm endpoint'leri interaktif olarak test edebilirsiniz:
 
-http://localhost:8085/swagger-ui.html
+text
 
+http://localhost:8085/swagger-ui.html
 OpenAPI JSON çıktısı için:
 
-http://localhost:8085/api-docs
+text
 
+http://localhost:8085/api-docs
 Proje Yapısı
+text
 
 src/main/java/com/hibernate/stockordermanagment/
 ├── config/            # Swagger, uygulama yapılandırmaları
@@ -114,7 +132,7 @@ src/main/java/com/hibernate/stockordermanagment/
 ├── mapper/            # MapStruct mapper arayüzleri
 ├── repository/        # Spring Data JPA repository'leri
 └── service/
-└── impl/          # Servis implementasyonları
+    └── impl/          # Servis implementasyonları
 
 src/main/resources/
 ├── db/migration/      # Flyway migration dosyaları
@@ -122,9 +140,8 @@ src/main/resources/
 
 src/test/java/         # Unit ve entegrasyon testleri
 Endpoint Listesi
-
 Ürün Yönetimi
-
+Method	Endpoint	Açıklama
 POST	/api/v1/products	Yeni ürün oluşturur
 GET	/api/v1/products	Ürünleri filtreli ve sayfalı listeler
 GET	/api/v1/products/{id}	ID ile ürün getirir
@@ -132,60 +149,58 @@ PUT	/api/v1/products/{id}	Ürünü günceller
 DELETE	/api/v1/products/{id}	Ürünü pasif duruma getirir
 GET	/api/v1/products/low-stock	Düşük stoklu ürünleri listeler
 GET	/api/v1/products/top-expensive	En pahalı 5 ürünü listeler
-
 Sipariş Yönetimi
-
+Method	Endpoint	Açıklama
 POST	/api/v1/orders	Yeni sipariş oluşturur
 GET	/api/v1/orders	Tüm siparişleri listeler
 GET	/api/v1/orders/{id}	ID ile sipariş getirir
 PUT	/api/v1/orders/{id}/cancel	Siparişi iptal eder
 Raporlama
-
+Method	Endpoint	Açıklama
 GET	/api/v1/reports/top-selling-products?limit=5	En çok satan ürünler
 GET	/api/v1/reports/order-summary	Genel sipariş özeti
-
 Örnek İstekler
-
 Ürün Oluşturma:
 
 JSON
+
 POST /api/v1/products
 {
-"name": "Kablosuz Kulaklık",
-"description": "Bluetooth destekli kulaklık",
-"category": "ELECTRONICS",
-"price": 1500.00,
-"stockQuantity": 20,
-"minimumStockLevel": 5
+  "name": "Kablosuz Kulaklık",
+  "description": "Bluetooth destekli kulaklık",
+  "category": "ELECTRONICS",
+  "price": 1500.00,
+  "stockQuantity": 20,
+  "minimumStockLevel": 5
 }
-
 Sipariş Oluşturma:
 
 JSON
+
 POST /api/v1/orders
 {
-"customerName": "Ahmet Yılmaz",
-"items": [
-{ "productId": 1, "quantity": 2 },
-{ "productId": 3, "quantity": 1 }
-]
+  "customerName": "Ahmet Yılmaz",
+  "items": [
+    { "productId": 1, "quantity": 2 },
+    { "productId": 3, "quantity": 1 }
+  ]
 }
-
 Testleri Çalıştırma
 Tüm testleri çalıştırmak için (Docker container'ının açık olması gerekir):
 
-./mvnw test
+Bash
 
+./mvnw test
 Belirli bir test sınıfını çalıştırmak için:
 
-./mvnw test -Dtest=OrderServiceTest
+Bash
 
+./mvnw test -Dtest=OrderServiceTest
 Proje aşağıdaki test türlerini içerir:
 
 Unit Testler (Mockito ile) — ProductServiceTest, OrderServiceTest
 Entegrasyon Testleri — OrderTransactionTest, OrderCancelTest
 Concurrency Testi — OrderConcurrencyTest
-
 Ortam Değişkenleri
 Veritabanı bağlantı bilgileri src/main/resources/application.properties dosyasında tanımlıdır:
 
@@ -197,19 +212,28 @@ spring.datasource.password=admin123
 server.port=8085
 Farklı bir ortamda çalıştırmak için bu değerleri kendi ortamınıza göre güncelleyebilir veya application-{profile}.properties dosyaları ile profil bazlı yapılandırma yapabilirsiniz.
 
-Katkıda Bulunma
+Mimari Kararlar
+Bu proje ile ilgili teknik tercihlerin (neden PostgreSQL, neden Pessimistic Lock, BigDecimal kullanımı, Stream API örnekleri vb.) detaylı gerekçeleri DOCS.md dosyasında yer almaktadır.
 
+Katkıda Bulunma
 Bu repository'yi fork edin
-Yeni bir branch oluşturun (git checkout -b feature/yeni-ozellik)
-Değişikliklerinizi commit edin (git commit -m 'Yeni özellik eklendi')
-Branch'inizi push edin (git push origin feature/yeni-ozellik)
+Yeni bir branch oluşturun
+Bash
+
+git checkout -b feature/yeni-ozellik
+Değişikliklerinizi commit edin
+Bash
+
+git commit -m "özellik: yeni özellik eklendi"
+Branch'inizi push edin
+Bash
+
+git push origin feature/yeni-ozellik
 Bir Pull Request açın
 Lisans
-
 Bu proje MIT lisansı ile lisanslanmıştır.
 
 İletişim
-
 Çetin Çetinkaya - GitHub
 
 Proje Linki: https://github.com/cetin-ckaya/Stock-Order-Managment
